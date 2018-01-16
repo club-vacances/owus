@@ -2,11 +2,31 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-const AddTransaction = () => {
+const AddTransaction = ({data: {loading, user}}) => {
+  if (!loading) {
+    return (
+      <div>
+        <select name="paidBy">
+          <option value={user.id}>{user.firstName} {user.lastName}</option>
+          { user.friends.map(friend => (
+            <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
+          ))}
+        </select>
+        <input type="text" required/>
+        <input type="number" required/>
+        <select name="paidFor">
+          <option value={user.id}>{user.firstName} {user.lastName}</option>
+          { user.friends.map(friend => (
+            <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
+          ))}
+        </select>
+        <button type="submit">Ajouter une dépense</button>
+      </div>
+    )
+  }
+
   return (
-    <div>
-      Ajout de transaction
-    </div>
+    <div>Loading</div>
   )
 }
 
@@ -16,6 +36,11 @@ export const appQuery = gql`
       id
       firstName
       lastName
+      friends {
+        id
+        firstName
+        lastName
+      }
     }
   }
 `
