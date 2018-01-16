@@ -14,7 +14,7 @@ const AddTransaction = ({data: {loading, user}}) => {
         </select>
         <input type="text" required/>
         <input type="number" required/>
-        <select name="paidFor">
+        <select name="paidFor" multiple>
           <option value={user.id}>{user.firstName} {user.lastName}</option>
           { user.friends.map(friend => (
             <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
