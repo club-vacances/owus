@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+const App = ({ data: { user } }) => {
+  return (
+    <div>
+      {JSON.stringify(user)}
+    </div>
+  )
 }
 
-export default App;
+export const appQuery = gql`
+  query user($id: Int!) {
+    user(id: $id) {
+      id
+      firstName
+      lastName
+    }
+  }
+`
+
+// The `graphql` wrapper executes a GraphQL query and makes the results
+// available on the `data` prop of the wrapped component (PostList)
+export default graphql(appQuery, {
+  options: ({ id }) => ({ variables: { id: 1 } })
+})(App)
