@@ -2,32 +2,40 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-const AddTransaction = ({data: {loading, user}}) => {
-  if (!loading) {
-    return (
-      <div>
-        <select name="paidBy">
-          <option value={user.id}>{user.firstName} {user.lastName}</option>
-          { user.friends.map(friend => (
-            <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
-          ))}
-        </select>
-        <input type="text" required/>
-        <input type="number" required/>
-        <select name="paidFor" multiple>
-          <option value={user.id}>{user.firstName} {user.lastName}</option>
-          { user.friends.map(friend => (
-            <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
-          ))}
-        </select>
-        <button type="submit">Ajouter une dépense</button>
-      </div>
-    )
+class AddTransaction extends Component {
+  addTransaction(event) {
+    console.log(event);
   }
 
-  return (
-    <div>Loading</div>
-  )
+  render() {
+    let {loading, user} = this.props.data;
+
+    if (!this.props.data.loading) {
+      return (
+        <div>
+          <select name="paidBy">
+            <option value={user.id}>{user.firstName} {user.lastName}</option>
+            { user.friends.map(friend => (
+              <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
+            ))}
+          </select>
+          <input type="text" required/>
+          <input type="number" required/>
+          <select name="paidFor" multiple>
+            <option value={user.id}>{user.firstName} {user.lastName}</option>
+            { user.friends.map(friend => (
+              <option value={friend.id}>{friend.firstName} {friend.lastName}</option>
+            ))}
+          </select>
+          <button type="submit" onClick={this.addTransaction}>Ajouter une dépense</button>
+        </div>
+      )
+    }
+
+    return (
+      <div>Loading</div>
+    )
+  }
 }
 
 export const appQuery = gql`
@@ -42,6 +50,12 @@ export const appQuery = gql`
         lastName
       }
     }
+  }
+`
+
+export const createTransactionMutation = gql`
+  mutation createTransaction($paidBy: User!, $description: String!, $amount: Int!, $paidFor: [User]!) {
+    createTransaction(paidBy: $paidBy, description: $description, amount: $amount, paidFor: $paidFor)
   }
 `
 

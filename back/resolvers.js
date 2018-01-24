@@ -8,7 +8,9 @@ const resolvers = {
     })
   },
   Mutation: {
-    createTransaction: (r, args) => ({})
+    createTransaction: (r, args) => {
+      console.log(r, args);
+    }
   },
   User: {
     transactions: user => [],
