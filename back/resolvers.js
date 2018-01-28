@@ -9,7 +9,7 @@ const resolvers = {
   },
   Mutation: {
     createTransaction: (r, args) => {
-      console.log(r, args);
+      console.log(r,args)
     }
   },
   User: {

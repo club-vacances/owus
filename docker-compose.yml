@@ -3,3 +3,5 @@ services:
   database:
     container_name: owus_db
     image: mongo:latest
+    ports:
+      - 27017:27017
