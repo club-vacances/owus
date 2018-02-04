@@ -1,3 +1,5 @@
+import { User, Transaction } from './database';
+
 const resolvers = {
   Query: {
     user: (r, args) => ({
@@ -8,8 +10,19 @@ const resolvers = {
     })
   },
   Mutation: {
-    createTransaction: (r, args) => {
+    createTransaction: async (r, args) => {
       console.log(r, args);
+      const lender = await User.findById(args.paidBy);
+      const transaction = Object.assign({}, args);
+      transaction.Borrowers = await User.findAll();
+      console.log(transaction);
+      let transaction2 = await lender.createLoan(transaction, {
+        include: [{
+          model: User,
+          as: 'Borrowers'
+        }]
+      });
+      console.log(transaction2.get());
     }
   },
   User: {
