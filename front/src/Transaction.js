@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-const Transaction = ({transaction}) => {
+const Transaction = ({ transaction }) => {
   return (
     <li>
-        {transaction.description}
-        -
-        {transaction.amount} centimes d'euro
-        -
-        for&nbsp;
-        {transaction.paidFor.map(user => (
-            <span key={user.id}>{user.firstName}&nbsp;</span>
-        ))}
+      {transaction.description}
+      -
+      {transaction.amount} centimes d'euro - for&nbsp;
+      {transaction.paidFor.map(user => (
+        <span key={user.id}>{user.firstName}&nbsp;</span>
+      ))}
     </li>
   );
 };

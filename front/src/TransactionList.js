@@ -5,19 +5,19 @@ import Transaction from './Transaction';
 
 const TransactionList = ({ data: { loading, user } }) => {
   if (loading) {
-    return <div>Loading</div>
+    return <div>Loading</div>;
   }
   return (
     <div>
       Liste transactions
       <ul>
-      {user.transactions.map(transaction => (
-        <Transaction key={transaction.id} transaction={transaction}/>
-      ))}
+        {user.transactions.map(transaction => (
+          <Transaction key={transaction.id} transaction={transaction} />
+        ))}
       </ul>
     </div>
-  )
-}
+  );
+};
 
 export const appQuery = gql`
   query user($id: Int!) {
@@ -35,10 +35,10 @@ export const appQuery = gql`
       }
     }
   }
-`
+`;
 
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (PostList)
 export default graphql(appQuery, {
-  options: ({ id }) => ({ variables: { id: 1 } })
-})(TransactionList)
+  options: ({ id }) => ({ variables: { id: 1 } }),
+})(TransactionList);

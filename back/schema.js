@@ -1,5 +1,5 @@
-import { makeExecutableSchema } from 'graphql-tools'
-import resolvers from './resolvers'
+import { makeExecutableSchema } from 'graphql-tools';
+import resolvers from './resolvers';
 
 const typeDefs = `
 type User {
@@ -23,7 +23,7 @@ type Query {
 type Mutation {
   createTransaction(description: String!, amount: Int!, paidBy: Int!, paidFor: [Int]!): Transaction
 }
-`
+`;
 
-const schema = makeExecutableSchema({ typeDefs, resolvers })
-export default schema
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+export default schema;
