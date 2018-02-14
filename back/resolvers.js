@@ -1,14 +1,11 @@
-import { User, Transaction } from './database';
+import { db, User, Transaction } from './database';
 import { Op } from 'sequelize';
 
 const resolvers = {
   Query: {
-    user: (r, args) => ({
-      id: 1,
-      firstName: 'Roger',
-      lastName: 'Maloutou',
-      picture: 'http://placehold.it/430x430',
-    }),
+    user: (r, args) => {
+      return User.findById(1);
+    },
   },
   Mutation: {
     createTransaction: async (r, args) => {
@@ -20,7 +17,6 @@ const resolvers = {
           },
         },
       });
-      console.log(borrowers);
 
       let transaction = await lender.createLoan(args);
       await transaction.setBorrowers(borrowers);
@@ -28,18 +24,23 @@ const resolvers = {
     },
   },
   User: {
-    transactions: user => [
-      {
-        id: 1,
-        description: 'Macdo',
-        amount: 1000,
-      },
-      {
-        id: 2,
-        description: 'Location ski',
-        amount: 39000,
-      },
-    ],
+    transactions: user => {
+      return db.query(
+        `SELECT DISTINCT transactions.*
+        FROM transactions
+        LEFT JOIN users as lender ON lender.id = transactions."lenderId"
+        LEFT JOIN borrower_debts ON borrower_debts."transactionId" = transactions.id
+        LEFT JOIN users as borrower ON borrower_debts."userId" = borrower.id
+        WHERE borrower.id = :userId
+        OR lender.id = :userId
+        `,
+        {
+          replacements: { userId: user.id },
+          model: Transaction,
+          type: db.QueryTypes.SELECT,
+        },
+      );
+    },
     friends: user => [
       {
         id: 2,
@@ -62,26 +63,8 @@ const resolvers = {
     ],
   },
   Transaction: {
-    lender: transaction => ({
-      id: 1,
-      firstName: 'Roger',
-      lastName: 'Maloutou',
-      picture: 'http://placehold.it/430x430',
-    }),
-    borrowers: transaction => [
-      {
-        id: 2,
-        firstName: 'Jane',
-        lastName: 'Doe',
-        picture: 'http://placehold.it/430x430',
-      },
-      {
-        id: 3,
-        firstName: 'Jack',
-        lastName: 'Daniels',
-        picture: 'http://placehold.it/430x430',
-      },
-    ],
+    lender: transaction => transaction.getLender(),
+    borrowers: transaction => transaction.getBorrowers(),
   },
 };
 
