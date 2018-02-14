@@ -15,12 +15,10 @@ const Transaction = db.define('transaction', {
   amount: Sequelize.INTEGER,
 });
 
-// paidBy
-User.hasMany(Transaction, { as: 'Loan', foreignKey: 'lenderId' });
+User.hasMany(Transaction, { as: 'Loans', foreignKey: 'lenderId' });
 Transaction.belongsTo(User, { as: 'Lender', foreignKey: 'lenderId' });
 
-// paidFor
-User.belongsToMany(Transaction, { as: 'Debt', through: 'borrower_debts' });
-Transaction.belongsToMany(User, { as: 'Borrower', through: 'borrower_debts' });
+User.belongsToMany(Transaction, { as: 'Debts', through: 'borrower_debts' });
+Transaction.belongsToMany(User, { as: 'Borrowers', through: 'borrower_debts' });
 
 export { db, User, Transaction };

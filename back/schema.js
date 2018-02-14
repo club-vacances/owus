@@ -14,14 +14,14 @@ type Transaction {
   id: Int
   description: String
   amount: Int
-  paidBy: User
-  paidFor: [User]
+  lender: User
+  borrowers: [User]
 }
 type Query {
   user(id: Int!): User
 }
 type Mutation {
-  createTransaction(description: String!, amount: Int!, paidBy: Int!, paidFor: [Int]!): Transaction
+  createTransaction(description: String!, amount: Int!, lender: Int!, borrowers: [Int]!): Transaction
 }
 `;
 

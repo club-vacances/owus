@@ -27,7 +27,7 @@ export const appQuery = gql`
         id
         description
         amount
-        paidFor {
+        borrowers {
           id
           firstName
           lastName

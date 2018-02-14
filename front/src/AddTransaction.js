@@ -6,12 +6,12 @@ class AddTransaction extends Component {
   state = {
     description: '',
     amount: null,
-    paidFor: [],
+    borrowers: [],
   };
 
   addTransaction = event => {
     event.preventDefault();
-    let transaction = { ...this.state, paidBy: this.props.user.id };
+    let transaction = { ...this.state, lender: this.props.user.id };
     this.props.mutate({
       variables: transaction,
     });
@@ -23,13 +23,29 @@ class AddTransaction extends Component {
     });
   };
 
+  handleBorrowerChange = ({ target }) => {
+    let borrowerId = target.value;
+    if (target.checked) {
+      this.setState({
+        borrowers: [borrowerId, ...this.state.borrowers],
+      });
+    } else {
+      let index = this.state.borrowers.indexOf(borrowerId);
+      let borrowers = [...this.state.borrowers];
+      borrowers.splice(index, 1);
+      this.setState({
+        borrowers,
+      });
+    }
+  };
+
   render() {
     let { loading, user } = this.props;
 
     if (!loading) {
       return (
         <form onSubmit={this.addTransaction}>
-          <select name="paidBy" onChange={this.handleChange}>
+          <select name="lender" onChange={this.handleChange}>
             <option key={user.id} value={user.id}>
               {user.firstName} {user.lastName}
             </option>
@@ -51,16 +67,18 @@ class AddTransaction extends Component {
             onChange={this.handleChange}
             required
           />
-          <select name="paidFor" onChange={this.handleChange} multiple>
-            <option key={user.id} value={user.id}>
-              {user.firstName} {user.lastName}
-            </option>
-            {user.friends.map(friend => (
-              <option key={friend.id} value={friend.id}>
-                {friend.firstName} {friend.lastName}
-              </option>
-            ))}
-          </select>
+          {[user, ...user.friends].map(borrower => (
+            <div key={borrower.id}>
+              <label>
+                <input
+                  type="checkbox"
+                  value={borrower.id}
+                  onChange={this.handleBorrowerChange}
+                />
+                {borrower.firstName} {borrower.lastName}
+              </label>
+            </div>
+          ))}
           <button type="submit">Ajouter une dépense</button>
         </form>
       );
@@ -87,16 +105,16 @@ export const appQuery = gql`
 
 export const createTransactionMutation = gql`
   mutation createTransaction(
-    $paidBy: Int!
+    $lender: Int!
     $description: String!
     $amount: Int!
-    $paidFor: [Int]!
+    $borrowers: [Int]!
   ) {
     createTransaction(
-      paidBy: $paidBy
+      lender: $lender
       description: $description
       amount: $amount
-      paidFor: $paidFor
+      borrowers: $borrowers
     ) {
       id
     }

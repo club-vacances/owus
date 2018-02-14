@@ -1,4 +1,5 @@
 import { User, Transaction } from './database';
+import { Op } from 'sequelize';
 
 const resolvers = {
   Query: {
@@ -11,16 +12,19 @@ const resolvers = {
   },
   Mutation: {
     createTransaction: async (r, args) => {
-      console.log(r, args);
+      const lender = await User.findById(args.lender);
+      const borrowers = await User.findAll({
+        where: {
+          id: {
+            [Op.in]: args.borrowers,
+          },
+        },
+      });
+      console.log(borrowers);
 
-      const lender = await User.findById(args.paidBy);
-      const transaction = { ...args };
-
+      let transaction = await lender.createLoan(args);
+      await transaction.setBorrowers(borrowers);
       console.log(transaction);
-
-      let transaction2 = await lender.createLoan(transaction);
-
-      console.log(transaction2.get());
     },
   },
   User: {
@@ -58,13 +62,13 @@ const resolvers = {
     ],
   },
   Transaction: {
-    paidBy: transaction => ({
+    lender: transaction => ({
       id: 1,
       firstName: 'Roger',
       lastName: 'Maloutou',
       picture: 'http://placehold.it/430x430',
     }),
-    paidFor: transaction => [
+    borrowers: transaction => [
       {
         id: 2,
         firstName: 'Jane',
