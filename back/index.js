@@ -14,7 +14,7 @@ app.listen(4000, () =>
 )
 
 db.sync().then(() => {
-  /* User.create({
+  User.create({
     firstName: "Roger",
     lastName: "Maloutou",
     picture: "http://placehold.it/430x430"
@@ -33,5 +33,5 @@ db.sync().then(() => {
     firstName: "Big",
     lastName: "Shaq",
     picture: "http://placehold.it/430x430"
-  }); */
+  });
 });

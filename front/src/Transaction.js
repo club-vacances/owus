@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 
 const Transaction = ({transaction}) => {
   return (
-    <li key={transaction.id}>
+    <li>
         {transaction.description}
         -
         {transaction.amount} centimes d'euro
         -
         for&nbsp;
         {transaction.paidFor.map(user => (
-            <span>{user.firstName}&nbsp;</span>
+            <span key={user.id}>{user.firstName}&nbsp;</span>
         ))}
     </li>
   );

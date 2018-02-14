@@ -12,7 +12,7 @@ const TransactionList = ({ data: { loading, user } }) => {
       Liste transactions
       <ul>
       {user.transactions.map(transaction => (
-        <Transaction transaction={transaction}/>
+        <Transaction key={transaction.id} transaction={transaction}/>
       ))}
       </ul>
     </div>

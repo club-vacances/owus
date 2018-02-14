@@ -12,16 +12,14 @@ const resolvers = {
   Mutation: {
     createTransaction: async (r, args) => {
       console.log(r, args);
+
       const lender = await User.findById(args.paidBy);
-      const transaction = Object.assign({}, args);
-      transaction.Borrowers = await User.findAll();
+      const transaction = {...args};
+
       console.log(transaction);
-      let transaction2 = await lender.createLoan(transaction, {
-        include: [{
-          model: User,
-          as: 'Borrowers'
-        }]
-      });
+
+      let transaction2 = await lender.createLoan(transaction);
+
       console.log(transaction2.get());
     }
   },

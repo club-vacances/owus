@@ -4,23 +4,16 @@ import { graphql, compose } from 'react-apollo'
 
 class AddTransaction extends Component {
   state = {
-    paidBy: null,
     description: '',
     amount: null,
     paidFor: []
   };
 
-  componentWillReceiveProps(nextProps) {
-    let {user} = nextProps.data;
-    this.setState({
-      paidBy: user.id
-    });
-  }
-
   addTransaction = (event) => {
     event.preventDefault();
+    let transaction = {...this.state, paidBy: this.props.user.id};
     this.props.mutate({
-      variables: this.state
+      variables: transaction
     });
   }
 
@@ -31,7 +24,7 @@ class AddTransaction extends Component {
   }
 
   render() {
-    let {loading, user} = this.props.data;
+    let {loading, user} = this.props;
 
     if (!loading) {
       return (
@@ -87,6 +80,9 @@ export const createTransactionMutation = gql`
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (PostList)
 export default compose(
-  graphql(appQuery, {options: ({ id }) => ({ variables: { id: 1 } })}),
+  graphql(appQuery, {
+    options: ({ id }) => ({ variables: { id: 1 } }),
+    props: ({ data }) => data
+  }),
   graphql(createTransactionMutation)
 )(AddTransaction)
