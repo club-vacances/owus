@@ -28,22 +28,24 @@ const seed = async () => {
     description: 'McDo 1',
     amount: 1337,
   });
-  await mcdo1.setLender([roger]);
+  await mcdo1.setLender(roger);
   await mcdo1.setBorrowers([roger, big]);
 
   const mcdo2 = await Transaction.create({
     description: 'McDo 2',
     amount: 1338,
   });
-  await mcdo2.setLender([roger]);
+  await mcdo2.setLender(roger);
   await mcdo2.setBorrowers([big, jack]);
 
   const mcdo3 = await Transaction.create({
     description: 'McDo 3',
     amount: 4242,
   });
-  await mcdo3.setLender([roger]);
+  await mcdo3.setLender(roger);
   await mcdo3.setBorrowers([roger, jane, jack]);
+
+  process.exit();
 };
 
 seed();
