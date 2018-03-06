@@ -3,7 +3,7 @@ import { db, User, Transaction } from './database';
 
 const resolvers = {
   Query: {
-    user: (r, args) => User.findById(1),
+    user: (r, args, { user }) => user
   },
   Mutation: {
     createTransaction: async (r, args) => {
