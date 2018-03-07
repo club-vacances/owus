@@ -22,7 +22,8 @@ const App = () => {
         <div>
           <ul>
             <li><a href="http://localhost:4000/auth/facebook">Login</a></li>
-            <li><Link to="/transactions">History</Link></li>
+            <li><a href="http://localhost:4000/logout">Logout</a></li>
+            <li><Link to="/transactions">Transaction list</Link></li>
             <li><Link to="/add-transaction">Add transaction</Link></li>
           </ul>
 

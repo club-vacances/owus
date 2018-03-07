@@ -11,7 +11,6 @@ const setupPassport = () => {
         callbackURL: 'http://localhost:4000/auth/facebook/callback',
       },
       (accessToken, refreshToken, profile, done) => {
-        console.log('profile:', profile);
         const [firstName, lastName] = profile.displayName.split(' ', 2);
         const defaultUser = {
           facebookId: profile.id,
@@ -31,12 +30,10 @@ const setupPassport = () => {
   );
 
   passport.serializeUser((user, done) => {
-    console.log('serialize:', user);
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log('deserialize:', id);
     let user = await User.findById(id);
     done(null, user);
   });

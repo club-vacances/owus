@@ -42,6 +42,10 @@ const start = async () => {
       failureRedirect: 'http://localhost:3000/',
     }),
   );
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('http://localhost:3000/');
+  });
   app.listen(4000, () =>
     console.log('Now browse to http://localhost:4000/graphiql'),
   );
